@@ -1,1 +1,1 @@
-# GabbyBusiness
+# GabbyBusiness is a business website.  
