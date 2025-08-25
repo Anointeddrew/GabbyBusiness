@@ -30,6 +30,7 @@ function Contact() {
         <input
           name="name"
           placeholder="Name"
+          autoComplete="name"
           className="w-full p-2 border rounded"
           value={formData.name}
           onChange={handleChange}
@@ -39,6 +40,7 @@ function Contact() {
           name="email"
           type="email"
           placeholder="Email"
+          autoComplete="email"
           className="w-full p-2 border rounded"
           value={formData.email}
           onChange={handleChange}

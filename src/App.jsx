@@ -5,6 +5,9 @@ import Services from "./pages/Services";
 import Contact from "./pages/Contact";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import AdminMessages from "./pages/AdminMessages";
+import ProtectedRoute from "./Components/ProtectedRoute";
+import Login from "./pages/Login";
 
 function App() {
   return (
@@ -17,6 +20,9 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/services" element={<Services />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/admin/messages" element={<AdminMessages />} />
+            <Route path="/admin/messages" element={<ProtectedRoute adminOnly><AdminMessages /></ProtectedRoute>} />
+            <Route path="/login" element={<Login />} />
           </Routes>
         </main>
         <Footer />
