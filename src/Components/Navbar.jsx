@@ -2,9 +2,24 @@ import { Link } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import { useAuth } from "../context/AuthContext";
+import { useState, useRef, useEffect } from "react";
 
 function Navbar() {
-   const { user, role } = useAuth();
+  const { user, role } = useAuth();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -13,21 +28,46 @@ function Navbar() {
       console.error("Logout failed:", err);
     }
   };
-  return (
-    <nav className="bg-blue-600 text-white p-4 flex justify-between items-center">
-      <div className="flex items-center space-x-2">
-        {/* <img src="/logo.png" alt="Logo" className="w-8 h-8" /> */}
-        <h1 className="text-xl font-bold">SOLAKE'S PLACE</h1>
-      </div>
-      <div className="space-x-4">
-        <Link to="/" className="font-semibold">Home</Link>
-        <Link to="/about" className="font-semibold">About Us</Link>
-        <Link to="/services" className="font-semibold">Services</Link>
-        <Link to="/contact" className="font-semibold">Contact</Link>
 
-        {/* Show admin link only if logged in as admin */}
+  return (
+    <nav className="bg-gray-400 text-white p-4 flex justify-between rounded-full items-center">
+      <div className="flex items-center space-x-2">
+        <h1 className="text-xl text-black font-bold italic">SOLAKE'S PLACE</h1>
+      </div>
+
+      {/* Hamburger Button (mobile) */}
+      <button
+        className="md:hidden flex flex-col space-y-1"
+        onClick={() => setMenuOpen(!menuOpen)}
+      >
+        <span className="block h-0.5 bg-white w-6"></span>
+        <span className="block h-0.5 bg-white w-6"></span>
+        <span className="block h-0.5 bg-white w-6"></span>
+      </button>
+
+      {/* Menu Items */}
+      <div
+        ref={menuRef}
+        className={`${
+          menuOpen ? "block" : "hidden"
+        } absolute top-16 right-4 bg-gray-600 rounded-lg p-4 md:static md:flex md:space-x-4 md:bg-transparent md:p-0`}
+      >
+        <Link to="/" className="font-semibold block md:inline">
+          Home
+        </Link>
+        <Link to="/about" className="font-semibold block md:inline">
+          About Us
+        </Link>
+        <Link to="/services" className="font-semibold block md:inline">
+          Services
+        </Link>
+        <Link to="/contact" className="font-semibold block md:inline">
+          Contact
+        </Link>
+
+        {/* Admin Link - only for admins */}
         {role === "admin" && (
-          <Link to="/admin/messages" className="font-semibold">
+          <Link to="/admin/messages" className="font-semibold block md:inline">
             Admin
           </Link>
         )}
@@ -36,19 +76,18 @@ function Navbar() {
         {user ? (
           <button
             onClick={handleLogout}
-            className="bg-red-500 px-3 py-1 rounded hover:bg-red-600"
+            className="text-red-500 px-3 py-1 rounded hover:bg-red-600 hover:text-white block md:inline"
           >
             Logout
           </button>
         ) : (
           <Link
             to="/login"
-            className="bg-green-500 px-3 py-1 rounded hover:bg-green-600"
+            className="text-blue-200 px-3 py-1 rounded hover:bg-blue-600 block md:inline"
           >
             Login
           </Link>
         )}
-
       </div>
     </nav>
   );

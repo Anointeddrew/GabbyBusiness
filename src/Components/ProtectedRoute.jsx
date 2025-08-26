@@ -1,15 +1,43 @@
-// src/components/ProtectedRoute.jsx
+// src/Components/ProtectedRoute.jsx
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useEffect, useState } from "react";
+import { auth, db } from "../firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
-function ProtectedRoute({ children, adminOnly = false }) {
-  const { user, role, loading } = useAuth();
+function ProtectedRoute({ children, adminOnly }) {
+  const [loading, setLoading] = useState(true);
+  const [authorized, setAuthorized] = useState(false);
 
-  if (loading) return <p>Loading...</p>;
-  if (!user) return <Navigate to="/login" />;
-  if (adminOnly && role !== "admin") return <Navigate to="/" />;
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // check Firestore user doc
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
 
-  return children;
+        if (userSnap.exists()) {
+          const data = userSnap.data();
+          if (adminOnly) {
+            setAuthorized(data.role === "admin"); // ✅ only admins allowed
+          } else {
+            setAuthorized(true);
+          }
+        } else {
+          setAuthorized(false);
+        }
+      } else {
+        setAuthorized(false);
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [adminOnly]);
+
+  if (loading) return <p className="text-center mt-10">Loading...</p>;
+
+  return authorized ? children : <Navigate to="/login" replace />;
 }
 
 export default ProtectedRoute;
