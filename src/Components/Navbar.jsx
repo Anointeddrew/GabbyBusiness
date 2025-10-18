@@ -30,12 +30,12 @@ function Navbar() {
   };
 
   return (
-    <nav className="bg-gray-400 text-white p-4 flex justify-between rounded-full items-center">
+    <nav className="bg-gradient-to-b from-red-200 to-gray-500 text-white p-4 flex justify-between items-center">
       <div className="flex items-center space-x-2">
         <h1 className="text-xl text-black font-bold italic">SOLAKE'S PLACE</h1>
       </div>
 
-      {/* Hamburger Button (mobile) */}
+      
       <button
         className="md:hidden flex flex-col space-y-1"
         onClick={() => setMenuOpen(!menuOpen)}
@@ -45,34 +45,34 @@ function Navbar() {
         <span className="block h-0.5 bg-white w-6"></span>
       </button>
 
-      {/* Menu Items */}
+      {/* items in my drop down menu */}
       <div
         ref={menuRef}
         className={`${
           menuOpen ? "block" : "hidden"
         } absolute top-16 right-4 bg-gray-600 rounded-lg p-4 md:static md:flex md:space-x-4 md:bg-transparent md:p-0`}
       >
-        <Link to="/" className="font-semibold block md:inline">
+        <Link to="/" className="font-semibold block md:inline hover:text-blue-400">
           Home
         </Link>
-        <Link to="/about" className="font-semibold block md:inline">
+        <Link to="/about" className="font-semibo hover:text-blue-400">
           About Us
         </Link>
-        <Link to="/services" className="font-semibold block md:inline">
+        <Link to="/services" className="font-semibold block md:inline hover:text-blue-400">
           Services
         </Link>
-        <Link to="/contact" className="font-semibold block md:inline">
+        <Link to="/contact" className="font-semibold block md:inline hover:text-blue-400">
           Contact
         </Link>
 
-        {/* Admin Link - only for admins */}
+        {/* link for admin login */}
         {role === "admin" && (
           <Link to="/admin/messages" className="font-semibold block md:inline">
             Admin
           </Link>
         )}
 
-        {/* Auth buttons */}
+        
         {user ? (
           <button
             onClick={handleLogout}

@@ -1,7 +1,7 @@
 function Home() {
   return (
-    <section className="text-center py-12 px-4">
-      <h2 className="text-3xl font-bold mb-4">Welcome to Our Business</h2>
+    <section className="text-center bg-gradient-to-b from-gray-400 to-white py-12 px-4">
+      <h2 className="text-3xl font-bold mb-4">Welcome </h2>
       <p className="text-lg text-gray-600 mb-6">We offer excellent food sales, catering and agricultural services tailored to your needs.</p>
       <a
         href="/contact"
