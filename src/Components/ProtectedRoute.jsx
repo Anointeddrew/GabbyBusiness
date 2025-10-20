@@ -1,4 +1,4 @@
-// src/Components/ProtectedRoute.jsx
+
 import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
@@ -12,14 +12,14 @@ function ProtectedRoute({ children, adminOnly }) {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        // check Firestore user doc
+        
         const userRef = doc(db, "users", user.uid);
         const userSnap = await getDoc(userRef);
 
         if (userSnap.exists()) {
           const data = userSnap.data();
           if (adminOnly) {
-            setAuthorized(data.role === "admin"); // ✅ only admins allowed
+            setAuthorized(data.role === "admin"); 
           } else {
             setAuthorized(true);
           }

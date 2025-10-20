@@ -1,4 +1,4 @@
-// src/context/AuthContext.jsx
+
 import { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../firebase";
@@ -16,7 +16,7 @@ export function AuthProvider({ children }) {
       if (firebaseUser) {
         setUser(firebaseUser);
 
-        // get role from Firestore (admins collection or users doc)
+        
         const docRef = doc(db, "users", firebaseUser.uid);
         const snap = await getDoc(docRef);
         if (snap.exists()) {
